@@ -3,7 +3,7 @@
 Adafruit_MPL3115A2 baro;
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   while(!Serial);
   Serial.println("Adafruit_MPL3115A2 test!");
 
@@ -15,7 +15,7 @@ void setup() {
   // use to set sea level pressure for current location
   // this is needed for accurate altitude measurement
   // STD SLP = 1013.26 hPa
-  baro.setSeaPressure(1013.26);
+  baro.setSeaPressure(1013.25);
 }
 
 void loop() {
