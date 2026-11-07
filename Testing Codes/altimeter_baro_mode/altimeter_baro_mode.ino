@@ -21,7 +21,7 @@ void setup() {
   // this is needed for accurate altitude measurement
   // STD SLP = 1013.26 hPa
   baro.setSeaPressure(1015.25);
-  baro.setOversampleRate(7);
+
 }
 
 void loop() {
