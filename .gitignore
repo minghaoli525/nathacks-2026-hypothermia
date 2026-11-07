@@ -1,0 +1,24 @@
+# macOS system files
+.DS_Store
+.AppleDouble
+
+# Windows system files
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# Editor settings
+.vscode/
+.idea/
+
+# Python (if used later)
+__pycache__/
+*.pyc
+
+# Arduino build files
+build/
+*.elf
+*.hex
