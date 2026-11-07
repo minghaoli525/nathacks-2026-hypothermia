@@ -20,6 +20,9 @@ Adafruit_SSD1306 display(128, 64, &Wire, -1);
 
 int sensor_value = 0;
 
+int i = 0;
+int tempsensorvalue = 0;
+
 void setup() {
   Serial.begin(BAUD_RATE);
   Wire.begin();
@@ -47,6 +50,7 @@ void loop() {
 
   // Read EMG sensor
   sensor_value = analogRead(INPUT_PIN);
+  
 
   // Send value to Serial Monitor
   Serial.println(sensor_value);
