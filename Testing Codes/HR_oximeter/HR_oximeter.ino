@@ -1,5 +1,5 @@
 #include <Wire.h>
-#include <DFRobot_BloodOxygen_S.h>
+#include "DFRobot_BloodOxygen_S.h"
 
 DFRobot_BloodOxygen_S_I2C sensor(&Wire, 0x57);
 
@@ -16,7 +16,7 @@ void setup() {
 }
 
 void loop() {
-  delay(4000);  // The module updates about every four seconds.
+  // delay(3000);  // The module updates about every four seconds.
   sensor.getHeartbeatSPO2();
 
   Serial.print("Heart rate: ");

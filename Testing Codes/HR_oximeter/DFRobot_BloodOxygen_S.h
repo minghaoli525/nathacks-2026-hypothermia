@@ -10,14 +10,14 @@
  */
 #ifndef __DFRobot_BloodOxygen_S_H__
 #define __DFRobot_BloodOxygen_S_H__
-#include "Arduino.h"
+#include <Arduino.h>
 #include <Wire.h>
-#include "DFRobot_RTU.h"
+#include <DFRobot_RTU.h>
 
 #if defined(ARDUINO_AVR_UNO) || defined(ESP8266)
-#include "SoftwareSerial.h"
+#include <SoftwareSerial.h>
 #else
-#include "HardwareSerial.h"
+#include <HardwareSerial.h>
 #endif 
 
 // Open this macro to see the program running in detail

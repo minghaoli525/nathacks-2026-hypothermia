@@ -5,6 +5,7 @@
 #include <Adafruit_SSD1306.h>
 Adafruit_SSD1306 display(128, 64, &Wire, -1);
 int mode = 0;
+#define TOTALMODECOUNT 6
 
 #define BUTTON A2
 int button = 0;
@@ -21,7 +22,10 @@ Adafruit_MPL3115A2 baro;
 
 #define BUZZER 8
 
-int i =0;
+#include "DFRobot_BloodOxygen_S.h"
+DFRobot_BloodOxygen_S_I2C sensor(&Wire, 0x57);
+
+// int i =0;
 
 void setup() {
   Serial.begin(115200);
@@ -34,11 +38,12 @@ void setup() {
   display.setTextColor(SSD1306_WHITE);
   display.display();
 
-
   baro.begin();
   baro.setSeaPressure(1013.25);
 
-  
+  sensor.begin();
+  sensor.sensorStartCollect();
+
   pinMode(BUZZER, OUTPUT);
 }
 
@@ -57,6 +62,8 @@ void loop() {
   // else {i+=1;}
 
   //sensor_value = TakeEMGreading(sensor_value);
+
+  sensor.getHeartbeatSPO2();
 
   if (sensor_value< 1500){
     sensor_value += 1;
@@ -99,6 +106,15 @@ void loop() {
     Serial.print("altitude = "); Serial.print(baro.getAltitude()); Serial.println(" m");
   }
 
+  if (mode == 4){
+    ShowOnScreen(sensor._sHeartbeatSPO2.Heartbeat,"Heartbeat:");
+    Serial.print("heartbeat = "); Serial.print(sensor._sHeartbeatSPO2.Heartbeat); Serial.println(" bpm");
+  }
+
+  if (mode == 5){
+    ShowOnScreen(sensor._sHeartbeatSPO2.SPO2,"SP02:");
+    Serial.print("SPO2 = "); Serial.print(sensor._sHeartbeatSPO2.SPO2); Serial.println(" %");
+  }
 }
 
 
@@ -118,7 +134,7 @@ int ButtonSwitch(int mode){
   // open button ~= 700 
   // closed button ~= 250
   
-  if (button1==1 && button<0 && mode <4){
+  if (button1==1 && button<0 && mode < TOTALMODECOUNT ){
     mode += 1;}
   else if (button1==1 && button<0) {
     mode = 0;
@@ -145,14 +161,21 @@ void ShowOnScreen(float value, char MeasurementName[10]){
 
     display.clearDisplay();
 
-    display.setTextSize(1.9);
+    display.setTextSize(2);
     display.setCursor(0, 0);
+    display.setTextWrap(false);
     display.println(MeasurementName);
+
 
     display.setTextSize(3);
     display.setCursor(0, 28);
-    display.println(value);
-
+    if (value!=-1){
+      display.println(value);
+    }
+    else {
+      display.setTextSize(1);
+      display.println("taking measurement...");
+    }
     display.display();
   }
 }
