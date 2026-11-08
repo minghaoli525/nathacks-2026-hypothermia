@@ -1,4 +1,9 @@
 
+#include <Adafruit_SSD1306.h>
+Adafruit_SSD1306 display(128, 64, &Wire, -1);
+int mode = 0;
+
+#define BUTTON 17
 int button = 0;
 bool on = false;
 int button1;
@@ -6,8 +11,8 @@ int button1;
 
 
 void setup() {
-
-  pinMode(38, INPUT);
+  Serial.begin(115200);
+  pinMode(BUTTON, INPUT); //button
 
 
 
@@ -17,6 +22,9 @@ void setup() {
 
 void loop() {
 
+  ButtonSwitch();
+
+
 
 }
 
@@ -24,7 +32,15 @@ void loop() {
 
 bool ButtonSwitch(){
   button1 = button;
-  button=digitalRead(38);
+  button=digitalRead(BUTTON);
+  Serial.println(button);
   if (button1==1 && button==0){
     on = !on;}
   return on;
+}
+
+
+
+void ShowOnScreen(){
+
+}
