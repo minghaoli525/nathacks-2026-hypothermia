@@ -10,25 +10,25 @@
  */
 #include "DFRobot_BloodOxygen_S.h"
 
-static uint16_t calculate_CRC(uint8_t *data, uint8_t len)
-{
-  uint16_t crc = 0xFFFF;
-  for( uint8_t pos = 0; pos < len; pos++)
-  {
-    crc ^= (uint16_t)data[ pos ];
-    for(uint8_t i = 8; i != 0; i--)
-    {
-      if((crc & 0x0001) != 0){
-        crc >>= 1;
-        crc ^= 0xA001;
-      }else{
-        crc >>= 1;
-      }
-    }
-  }
-  crc = ((crc & 0x00FF) << 8) | ((crc & 0xFF00) >> 8);
-  return crc;
-}
+// static uint16_t calculate_CRC(uint8_t *data, uint8_t len)
+// {
+//   uint16_t crc = 0xFFFF;
+//   for( uint8_t pos = 0; pos < len; pos++)
+//   {
+//     crc ^= (uint16_t)data[ pos ];
+//     for(uint8_t i = 8; i != 0; i--)
+//     {
+//       if((crc & 0x0001) != 0){
+//         crc >>= 1;
+//         crc ^= 0xA001;
+//       }else{
+//         crc >>= 1;
+//       }
+//     }
+//   }
+//   crc = ((crc & 0x00FF) << 8) | ((crc & 0xFF00) >> 8);
+//   return crc;
+// }
 
 void DFRobot_BloodOxygen_S::getHeartbeatSPO2(void)
 {

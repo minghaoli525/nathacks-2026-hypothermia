@@ -5,7 +5,7 @@
 #include <Adafruit_SSD1306.h>
 Adafruit_SSD1306 display(128, 64, &Wire, -1);
 int mode = 0;
-#define TOTALMODECOUNT 6
+#define TOTALMODECOUNT 5
 
 #define BUTTON A2
 int button = 0;
@@ -19,13 +19,21 @@ unsigned long lastSample = millis();
 
 #include "Adafruit_MPL3115A2.h"
 Adafruit_MPL3115A2 baro;
+const float P0 = 1012.25;     // Standard sea-level pressure in hPa (or hPa setting from local METAR)
+const float L  = 0.0065;      // Temperature lapse rate (K/m)
+const float T0 = 288.15;      // Standard temperature at sea level (Kelvin, 15°C)
+const float g  = 9.80665;     // Acceleration due to gravity (m/s^2)
+const float R  = 287.05;      // Specific gas constant for dry air (J/kg*K)
+const float exponent = (R * L) / g;
 
 #define BUZZER 8
 
 #include "DFRobot_BloodOxygen_S.h"
 DFRobot_BloodOxygen_S_I2C sensor(&Wire, 0x57);
 
-// int i =0;
+int i =0;
+int ii = 0;
+
 
 void setup() {
   Serial.begin(115200);
@@ -39,7 +47,7 @@ void setup() {
   display.display();
 
   baro.begin();
-  baro.setSeaPressure(1013.25);
+  baro.setSeaPressure(1003.25);
 
   sensor.begin();
   sensor.sensorStartCollect();
@@ -86,7 +94,7 @@ void loop() {
   if (mode== 0){
     ShowOnScreen(sensor_value,"EMG:");
     // Serial.print(millis());
-    // Serial.print(",");
+    // Serial.print("█");
     // Serial.println(sensor_value);
   }
 
@@ -94,6 +102,8 @@ void loop() {
   if (mode == 1){
     ShowOnScreen(baro.getTemperature(),"Temperature:");
     Serial.print("temperature = "); Serial.print(baro.getTemperature()); Serial.println(" C");
+    
+    
   }
 
   if (mode == 2){
@@ -104,11 +114,12 @@ void loop() {
   if (mode == 3){
     ShowOnScreen(baro.getAltitude(),"Altitude:");
     Serial.print("altitude = "); Serial.print(baro.getAltitude()); Serial.println(" m");
+    Serial.print("altitude = "); Serial.print(calculateAltitude(baro.getPressure(),baro.getTemperature())); Serial.println(" m");
   }
 
   if (mode == 4){
-    ShowOnScreen(sensor._sHeartbeatSPO2.Heartbeat,"Heartbeat:");
-    Serial.print("heartbeat = "); Serial.print(sensor._sHeartbeatSPO2.Heartbeat); Serial.println(" bpm");
+    ShowOnScreen(sensor._sHeartbeatSPO2.Heartbeat,"Heart rate:");
+    // Serial.print("heart rate = "); Serial.print(sensor._sHeartbeatSPO2.Heartbeat); Serial.println(" bpm");
   }
 
   if (mode == 5){
@@ -121,7 +132,7 @@ void loop() {
 
 int ButtonSwitch(int mode){
   
-  Serial.println(button);
+  // Serial.println(button);
   
   if (button>0){
     button1 = 1;
@@ -139,7 +150,7 @@ int ButtonSwitch(int mode){
   else if (button1==1 && button<0) {
     mode = 0;
   }
-  Serial.println(mode);
+  //Serial.println(mode);
   return mode;
 
 }
@@ -168,14 +179,61 @@ void ShowOnScreen(float value, char MeasurementName[10]){
 
 
     display.setTextSize(3);
-    display.setCursor(0, 28);
+    display.setCursor(0, 28); //was 28
     if (value!=-1){
       display.println(value);
+      art1();
+
     }
     else {
+      display.setCursor(0, 35);
       display.setTextSize(1);
-      display.println("taking measurement...");
+      display.print("Taking measurement");
+      art2();
     }
     display.display();
   }
+}
+
+float calculateAltitude(float P, float T) {
+  // Barometric formula: h = (T0 / L) * (1 - (P / P0)^( (R*L)/g ))
+  float pressureRatio = P / P0;
+  float altitude = (T0 / L) * (1.0 - pow(pressureRatio, exponent));
+  return altitude;
+}
+
+
+bool art1(){
+  display.fillRect(64,61,ii,3,1);
+  display.fillRect(64-ii,61,ii,3,1);
+  ii+=10;
+  if (ii>70){ii=0;}      
+}
+bool art2(){
+  switch (i){
+    case 1: 
+      display.print(".");
+      i=2;
+      break; 
+    case 2: 
+      display.print("..");
+      i=3;
+      break;
+    case 3: 
+      display.print("...");
+      i=4;
+      break;
+    case 4: 
+      display.print("..");
+      i=5;
+      break;
+    case 5: 
+      display.print(".");
+      i=0;
+      break;  
+    case 0:
+      i=1;
+      break;}   
+  // Serial.println(i);
+
 }
