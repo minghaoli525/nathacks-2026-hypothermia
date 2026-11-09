@@ -152,7 +152,7 @@ This sketch reads raw EMG on A0 at approximately 20 samples per second, prints t
 
 - **Team presentation** — Google Slides — https://docs.google.com/presentation/d/1Yt2TOdoYgUkpzP7vBjieTFo87q6CACHg/edit?slide=id.p1#slide=id.p1
 - [ECG resting plot](Testing%20Codes/ECG_TEST/ecg_plot_rest.png) and [ECG active plot](Testing%20Codes/ECG_TEST/ecg_active_plot.png)
-- - [EMG muscle contraction plot](Testing%20Codes/EMG_Test/EMG_grapth.png)
+- [EMG muscle contraction plot](Testing%20Codes/EMG_Test/EMG_grapth.png)
 ### EMG Demonstration — Gym Testing
 
 The following video demonstrates our EMG prototype
