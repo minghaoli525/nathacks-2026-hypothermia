@@ -201,7 +201,7 @@ void loop() {
   if (now - lastEmg >= 50) {
     lastEmg = now;
     emg = analogRead(EmgPin);
-    emgOutsideRange = emg < 450 || emg > 650;
+    emgOutsideRange = emg < 450 || emg > 580;
   }
   serviceButton(now);
 
